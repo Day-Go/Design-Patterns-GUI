@@ -13,11 +13,11 @@ Color = namedtuple('Color', ['value', 'category', 'label'])
 class Widget(ABC):
     """ Abstract Product """
     @abstractmethod
-    def render(self):
+    def create(self):
         pass
 
     @abstractmethod
-    def create_theme(self):
+    def apply_theme(self):
         pass
 
 
@@ -26,15 +26,15 @@ class ThemedWidget(Widget):
 
     Since all themed widgets need to create their theme on instantiation
     we made this class that inherits from the ABC where the common 
-    implementation of create_theme is defined.
+    implementation of apply_theme is defined.
 
     All concrete products inherit from this class and implement their own
     render methods
     """    
-    def render(self):
+    def create(self):
         pass
 
-    def create_theme(self, concrete_style: namedtuple):
+    def apply_theme(self, concrete_style: namedtuple):
         with Theme('theme') as theme:
             with ThemeComponent() as theme_component:
                 for component in concrete_style: 
@@ -44,7 +44,6 @@ class ThemedWidget(Widget):
                             value=component.value,
                             category=component.category
                         )
-
                     elif isinstance(component, Style):
                         ThemeStyle(
                             getattr(dpg, f'mvStyleVar_{component.label}'), 
@@ -57,7 +56,7 @@ class ThemedWidget(Widget):
 
 class DarkWidget(ThemedWidget):
     def __init__(self) -> None:
-        self.create_theme([
+        self.apply_theme([
             Color(value=BLACK, category=0, label='ChildBg'),
             Color(value=GRAY, category=0, label='Button'),
             Color(value=WHITE, category=0, label='Text'),
@@ -68,7 +67,7 @@ class DarkWidget(ThemedWidget):
 class LightWidget(ThemedWidget):
     """ Concrete product A2 """
     def __init__(self) -> None:
-        self.create_theme([
+        self.apply_theme([
             Color(value=OFF_WHITE, category=0, label='ChildBg'),
             Color(value=WHITE, category=0, label='Button'),
             Color(value=BLACK, category=0, label='Text'),
@@ -79,28 +78,28 @@ class LightWidget(ThemedWidget):
 
 class DarkWindow(DarkWidget):
     """ Concrete product A1 """
-    def render(self):
+    def create(self):
         window = ChildWindow()
         window.theme = self.theme
         return window
 
 class LightWindow(LightWidget):
     """ Concrete product A2 """
-    def render(self):
+    def create(self):
         window = ChildWindow()
         window.theme = self.theme
         return window
 
 class DarkButton(DarkWidget):
     """ Concrete product B1 """
-    def render(self):
+    def create(self):
         button = Button(events=True)
         button.theme = self.theme
         return button
 
 class LightButton(LightWidget):
     """ Concrete product B2 """
-    def render(self):
+    def create(self):
         button = Button(events=True)
         button.theme = self.theme
         return button

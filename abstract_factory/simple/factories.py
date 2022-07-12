@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from products import ThemedWindow, ThemedButton, DarkWindow, LightWindow, DarkButton, LightButton
 
+
 class ThemeFactory(ABC):
     """ The abstract factory """
     @abstractmethod

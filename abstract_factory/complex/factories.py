@@ -4,30 +4,30 @@ from products import Widget, DarkWindow, LightWindow, DarkButton, LightButton
 class ThemeFactory(ABC):
     """ The abstract factory """
     @abstractmethod
-    def create_window(self):
+    def window_method(self):
         pass
 
     @abstractmethod
-    def create_button(self):
+    def button_method(self):
         pass
 
 class DarkModeFactory(ThemeFactory):
     """ Concrete factory 1 """
     # Create Product A
-    def create_window(self) -> Widget:
+    def window_method(self) -> Widget:
         return DarkWindow()
 
     # Create Product B
-    def create_button(self) -> Widget:
+    def button_method(self) -> Widget:
         return DarkButton()
 
 
 class LightModeFactory(ThemeFactory):
     """ Concrete factory 2 """
     # Create Product A
-    def create_window(self) -> Widget:
+    def window_method(self) -> Widget:
         return LightWindow()
 
     # Create Product B
-    def create_button(self) -> Widget:
+    def button_method(self) -> Widget:
         return LightButton()
