@@ -1,17 +1,16 @@
 """
 Written by John Long - 13/07/2022
 
-A minimum working example of the builder design pattern. The example shows
-how window components (widgets) can be composed in a certain order by
-the builder to form unique window styles. 
+A minimum working example of the builder design pattern. The example shows how 
+window components (widgets) can be composed in a certain order by the builder 
+to form unique window styles. 
 
 The WindowBuilder provides an interface for what methods a builder can 
-implement. The Director class has a builder that it can use construct 
-complex windows by implementing methods that outline the order and 
-quantity of each widget. In this implementation, a Product is a window 
-that has been populated with widgets. 
+implement. The Director class has a builder that it can use construct complex 
+windows by implementing methods that outline the order and quantity of each 
+widget. In this implementation, a Product is a window that has been populated
+with widgets.
 """
-
 from dearpypixl import Application, Viewport
 from dearpypixl.items.containers import Window, Group
 from dearpypixl.items.basic import Text
