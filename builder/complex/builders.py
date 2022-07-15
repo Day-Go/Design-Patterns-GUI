@@ -35,6 +35,9 @@ class Builder(ABC):
     def add_group(self) -> None:
         pass
 
+    @abstractmethod
+    def add_child_window(self):
+        pass
 
 class WindowBuilder(Builder):
     def __init__(self) -> None:
@@ -62,18 +65,25 @@ class WindowBuilder(Builder):
 
         self._product.add(repr(self.window), self.window)
 
-    def add_text(self, value: str = ''):
-        with self._product.window:
-            Text(value)
+    def add_text(self, value: str = '', parent: str = None):
+        with self.window:
+            if parent:
+                self.text = Text(value, parent=parent)
+            else:
+                self.text = Text(value)
+
+            
 
     def add_button(self, label: str = None, parent: Item = None,
                    rel_x: float = None) -> None:
         with self.window:
             if parent:
-                btn = Button(label, parent=parent)
+                btn = Button(label, parent=parent, events=True)
             else:
-                btn = Button(label)
+                btn = Button(label, events=True)
             btn.width = 125
+
+        setattr(self, repr(btn), btn)
 
         self._product.add(repr(btn), btn)
 
@@ -81,6 +91,7 @@ class WindowBuilder(Builder):
         with self.window:
             input_text = InputText(label)
 
+        self.input_text = input_text
         self._product.add(repr(input_text), input_text)
 
     def add_int_slider(self, label: str = None) -> None:
@@ -95,7 +106,7 @@ class WindowBuilder(Builder):
     def add_group(
                 self, 
                 horizontal: bool = False, 
-                horizontal_spacing: int = None
+                horizontal_spacing: int = None,
             ) -> None:
         with self.window:
             if horizontal:
@@ -108,3 +119,9 @@ class WindowBuilder(Builder):
 
         self._product.add(repr(self.group), self.group)
         
+    def add_child_window(self, parent: str = None):
+        with self.window:
+            if parent:
+                self.child_window = ChildWindow(parent=parent)
+            else:
+                self.child_window = ChildWindow()
